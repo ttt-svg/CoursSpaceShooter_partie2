@@ -8,12 +8,12 @@ public class Laser : MonoBehaviour
     [SerializeField] private string _nom = default;
     [SerializeField] private GameObject _miniExplosionPrefab = default;
 
-    private UIManager _uiManager;
+    private UIManagerGame _uiManagerGame;
     private float _vitesseLaserEnnemi;
 
     private void Awake()
     {
-        _uiManager = FindObjectOfType<UIManager>();
+        _uiManagerGame = FindObjectOfType<UIManagerGame>();
     }
     void Update()
     {
@@ -23,25 +23,7 @@ public class Laser : MonoBehaviour
             // Déplace le laser vers le haut
             DeplacementLaserJoueur();
         }
-        else if (_nom == "Enemy")
-        {
-            _vitesseLaserEnnemi = _uiManager.getVitesseEnnemi() + 3.0f;
-            transform.Translate(Vector3.down * Time.deltaTime * _vitesseLaserEnnemi);
-            if (transform.position.y < -6f)
-            {
-                Destroy(this.gameObject);
-            }
-        }
-        else
-        {
-            _vitesseLaserEnnemi = _uiManager.getVitesseEnnemi() + 6.0f;
-            transform.Translate(Vector3.down * Time.deltaTime * _vitesseLaserEnnemi);
-            if (transform.position.y < -6f)
-            {
-                Destroy(this.gameObject);
-            }
-        }
-        
+  
     }
 
     private void DeplacementLaserJoueur()

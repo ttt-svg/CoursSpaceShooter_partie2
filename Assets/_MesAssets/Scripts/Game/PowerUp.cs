@@ -26,13 +26,13 @@ public class PowerUp : MonoBehaviour {
             if (player != null) {
                 switch (_powerUpID) {
                     case 0:
-                        player.PowerTripleShot();
+                        //player.PowerTripleShot();
                         break;
                     case 1:
-                        player.SpeedPowerUp();
+                        //player.SpeedPowerUp();
                         break;
                     case 2:
-                        player.ShieldPowerUp();
+                        //player.ShieldPowerUp();
                         break;
                 }
             }

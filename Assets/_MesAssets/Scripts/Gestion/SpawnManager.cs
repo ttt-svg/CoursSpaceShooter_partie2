@@ -10,18 +10,16 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] private GameObject[] _enemiesPrefabs = default;
 
     private bool _stopSpawn = false;
-    private UIManager _uiManager;
-
+    
     void Start()
     {
-        _uiManager = FindObjectOfType<UIManager>();
         StartSpawning();  //Déclenche les coroutine pour le spawn des ennemis et des améliorations
     }
 
     private void StartSpawning()
     {
-        StartCoroutine(SpawnCoroutine());
-        StartCoroutine(SpawnPUCoroutine());
+        StartCoroutine(SpawnEnemies());
+        //StartCoroutine(SpawnPUCoroutine());
     }
 
     // Coroutine pour l'apparition des PowerUps
@@ -39,34 +37,18 @@ public class SpawnManager : MonoBehaviour
     }
 
     //Coroutine pour l'apparition des ennemis
-    IEnumerator SpawnCoroutine()
+    IEnumerator SpawnEnemies()
     {
+        Debug.Log("Testtttttttt");
         yield return new WaitForSeconds(1f); // Délai initial
         while (!_stopSpawn)
         {
             Vector3 positionSpawn = new Vector3(Random.Range(-8f, 8f), 7f, 0f);
             //Choisi au hasard un enemy faisant partie du tableau et l'instancie
-            if(_uiManager.getScore() > 1000)
-            {
-                int randomEnemy = Random.Range(0, _enemiesPrefabs.Length);
-                GameObject newEnemy = Instantiate(_enemiesPrefabs[randomEnemy], positionSpawn, Quaternion.identity);
-                newEnemy.transform.parent = _container.transform;
-            }
-            else
-            {
-                GameObject newEnemy = Instantiate(_enemiesPrefabs[1], positionSpawn, Quaternion.identity);
-                newEnemy.transform.parent = _container.transform;
-            }
-
-            if (_uiManager.getScore() < 3000)
-            {
-                yield return new WaitForSeconds(5f);
-            }
-            else
-            {
-                yield return new WaitForSeconds(3f);
-            }
-                
+            Debug.Log("Testtttttttt");
+            //int randomEnemy = Random.Range(0, _enemiesPrefabs.Length);
+            GameObject newEnemy = Instantiate(_enemiesPrefabs[0], positionSpawn, Quaternion.identity);
+            newEnemy.transform.parent = _container.transform;
         }
 
     }
@@ -74,7 +56,7 @@ public class SpawnManager : MonoBehaviour
     // Méthodes publiques ========================================================
 
     // Arrête le spawn à la mort du joueur (fin de partie)
-    public void mortJoueur()
+    public void MortJoueur()
     {
         _stopSpawn = true;
     }
