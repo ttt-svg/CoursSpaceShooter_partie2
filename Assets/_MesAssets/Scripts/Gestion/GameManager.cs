@@ -1,5 +1,6 @@
 
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -20,9 +21,16 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private float _vitesseEnnemi = 6.0f;
     public float VitesseEnnemi => _vitesseEnnemi;
+    [SerializeField] private float _tempsApparitionEnnemis = 5f;
+    public float TempsArraritionEnnemis => _tempsApparitionEnnemis;
 
     private int _score;
     public int Score => _score;
+
+    private bool _changeTempsApparition = false;
+    private bool _changeVitesseEnnemis = false;
+
+
 
     private void Start()
     {
@@ -32,7 +40,10 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-
+        if(SceneManager.GetActiveScene().buildIndex == 0)
+        {
+            Destroy(gameObject);
+        }
     }
 
     // Méthode qui permet l'augmentation du score
@@ -40,5 +51,14 @@ public class GameManager : MonoBehaviour
     {
         _score += points;
         UIManagerGame.Instance.UpdateScore(_score);
+        if (_score % 1000 == 0)
+        {
+            _vitesseEnnemi += 2f;
+        }
+
+        if(_score % 2000 == 0)
+        {
+            _tempsApparitionEnnemis -= 1f;
+        }
     }
 }

@@ -59,6 +59,7 @@ public class Player : MonoBehaviour
     // Méthode appellé quand le joueur subit du dégat
     public void Degats()
     {
+        _viesJoueur--;
         UIManagerGame.Instance.ChangeLivesDisplayImage(_viesJoueur);
  
         // Si le joueur n'a plus de vie on arrête le spwan et détruit le joueur

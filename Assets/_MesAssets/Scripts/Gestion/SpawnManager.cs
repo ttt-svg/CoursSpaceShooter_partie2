@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
 {
-//    [SerializeField] private GameObject _enemyPrefab = default;
     [SerializeField] private GameObject _container = default;
     [SerializeField] private GameObject[] _powerUpPrefab = default;
     [SerializeField] private GameObject[] _enemiesPrefabs = default;
@@ -39,16 +38,17 @@ public class SpawnManager : MonoBehaviour
     //Coroutine pour l'apparition des ennemis
     IEnumerator SpawnEnemies()
     {
-        Debug.Log("Testtttttttt");
+        
         yield return new WaitForSeconds(1f); // Délai initial
         while (!_stopSpawn)
         {
             Vector3 positionSpawn = new Vector3(Random.Range(-8f, 8f), 7f, 0f);
             //Choisi au hasard un enemy faisant partie du tableau et l'instancie
-            Debug.Log("Testtttttttt");
-            //int randomEnemy = Random.Range(0, _enemiesPrefabs.Length);
-            GameObject newEnemy = Instantiate(_enemiesPrefabs[0], positionSpawn, Quaternion.identity);
+            int randomEnemy = Random.Range(0, _enemiesPrefabs.Length);
+            GameObject newEnemy = Instantiate(_enemiesPrefabs[randomEnemy], positionSpawn, Quaternion.identity);
             newEnemy.transform.parent = _container.transform;
+            yield return new WaitForSeconds(Random.Range(GameManager.Instance.TempsArraritionEnnemis, 
+                GameManager.Instance.TempsArraritionEnnemis + 3f));
         }
 
     }

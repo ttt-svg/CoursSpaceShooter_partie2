@@ -46,9 +46,7 @@ public class UIManagerGame : MonoBehaviour  {
             _pauseOn = true;
         }
         else if ((Input.GetButtonDown("Pause") && _pauseOn)) {
-            _pausePanel.SetActive(false);
-            Time.timeScale = 1;
-            _pauseOn = false;
+            ResumeGame();
         }
 
     }
@@ -83,6 +81,7 @@ public class UIManagerGame : MonoBehaviour  {
     public void ResumeGame() {
         _pausePanel.SetActive(false);
         Time.timeScale = 1;
+        _pauseOn = false;
     }
 
     public void OnReprendreClick()
