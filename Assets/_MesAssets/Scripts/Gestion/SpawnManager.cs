@@ -18,7 +18,7 @@ public class SpawnManager : MonoBehaviour
     private void StartSpawning()
     {
         StartCoroutine(SpawnEnemies());
-        //StartCoroutine(SpawnPUCoroutine());
+        StartCoroutine(SpawnPUCoroutine());
     }
 
     // Coroutine pour l'apparition des PowerUps
@@ -31,7 +31,7 @@ public class SpawnManager : MonoBehaviour
             //Choisi au hasard un powerUp faisant partie du tableau et l'instancie
             int randomPU = Random.Range(0, _powerUpPrefab.Length);
             Instantiate(_powerUpPrefab[randomPU], positionSpawn, Quaternion.identity);
-            yield return new WaitForSeconds(Random.Range(10f, 15f));
+            yield return new WaitForSeconds(Random.Range(3f, 5f));
         }
     }
 

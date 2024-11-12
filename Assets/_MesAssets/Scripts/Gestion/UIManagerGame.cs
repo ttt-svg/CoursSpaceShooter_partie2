@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
 using UnityEditor;
+using UnityEngine.EventSystems;
 
 public class UIManagerGame : MonoBehaviour  {
 
@@ -29,6 +30,8 @@ public class UIManagerGame : MonoBehaviour  {
     [SerializeField] private Sprite[] _liveSprites = default;
     [SerializeField] private GameObject _pausePanel = default;
 
+    [SerializeField] private GameObject _boutonReprendre = default;
+
     private void Start() {
         _pauseOn = false;
         Time.timeScale = 1;
@@ -44,6 +47,8 @@ public class UIManagerGame : MonoBehaviour  {
             _pausePanel.SetActive(true);
             Time.timeScale = 0;
             _pauseOn = true;
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(_boutonReprendre);
         }
         else if ((Input.GetButtonDown("Pause") && _pauseOn)) {
             ResumeGame();

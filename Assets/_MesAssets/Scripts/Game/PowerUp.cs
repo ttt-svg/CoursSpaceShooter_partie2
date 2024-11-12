@@ -22,17 +22,17 @@ public class PowerUp : MonoBehaviour {
         if(other.tag == "Player") {
             Player player = other.GetComponent<Player>();
             Destroy(this.gameObject);
-            AudioSource.PlayClipAtPoint(_powerUpSound, Camera.main.transform.position, 0.6f);
+            //AudioSource.PlayClipAtPoint(_powerUpSound, Camera.main.transform.position, 0.6f);
             if (player != null) {
                 switch (_powerUpID) {
                     case 0:
-                        //player.PowerTripleShot();
+                        player.PowerTripleShot();
                         break;
                     case 1:
-                        //player.SpeedPowerUp();
+                        player.SpeedPowerUp();
                         break;
                     case 2:
-                        //player.ShieldPowerUp();
+                        player.ShieldPowerUp();
                         break;
                 }
             }

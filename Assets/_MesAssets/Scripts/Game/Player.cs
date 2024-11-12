@@ -7,11 +7,16 @@ public class Player : MonoBehaviour
 {
     [SerializeField] private float _speed = 15f;
     [SerializeField] private GameObject _laserPrefab = default;
+    [SerializeField] private GameObject _tripleLaserPrefab = default;
     [SerializeField] private float _delai = 0.5f;
     [SerializeField] private int _viesJoueur = 3;
     
+    
     private float _cadenceInitiale;
     private float _canFire = -1;
+    private bool _isTripleActive = false;
+    private GameObject _shield;
+    private Animator _animator;
 
     private void Awake()
     {
@@ -20,7 +25,11 @@ public class Player : MonoBehaviour
 
     void Start()
     {
+        _shield = transform.GetChild(0).gameObject;
+        _shield.SetActive(false);
         transform.position = new Vector3(0f, -2.4f, 0f);  // position initiale du joueur
+        _cadenceInitiale = _delai;
+        _animator = GetComponent<Animator>();
     }
 
     void Update()
@@ -29,6 +38,34 @@ public class Player : MonoBehaviour
         Tir();
     }
     
+    public void SpeedPowerUp()
+    {
+        _delai = 0.1f;
+        StartCoroutine(SpeedCoroutine());
+    }
+    public void PowerTripleShot()
+    {
+        _isTripleActive= true;
+        StartCoroutine(tripleCoroutine());
+    }
+
+    IEnumerator tripleCoroutine()
+    {
+        yield return new WaitForSeconds(5);
+        _isTripleActive = false;
+    }
+
+    IEnumerator SpeedCoroutine()
+    {
+        yield return new WaitForSeconds(5);
+        _delai = _cadenceInitiale;
+    }
+
+    public void ShieldPowerUp()
+    {
+        _shield.SetActive(true);
+    }
+
     // Méthode qui gère le tir du joueur ainsi que le délai entre chaque tir
     private void Tir()
     {
@@ -36,7 +73,15 @@ public class Player : MonoBehaviour
         if (Input.GetButton("Fire1") && Time.time > _canFire)
         {
             _canFire = Time.time + _delai;
-            Instantiate(_laserPrefab, (transform.position + new Vector3(0f, 0.9f, 0f)), Quaternion.identity);
+            if(!_isTripleActive)
+            {
+                Instantiate(_laserPrefab, (transform.position + new Vector3(0f, 0.9f, 0f)), Quaternion.identity);
+            }
+            else
+            {
+                Instantiate(_tripleLaserPrefab, (transform.position + new Vector3(0f, 0.9f, 0f)), Quaternion.identity);
+
+            }
         }
     }
 
@@ -48,6 +93,21 @@ public class Player : MonoBehaviour
         Vector3 direction = new Vector3(horizontalInput, verticalInput, 0f);
         transform.Translate(direction * Time.deltaTime * _speed);
 
+        if(direction.x> 0f)
+        {
+            _animator.SetBool("turn_right", true);
+            _animator.SetBool("turn_left", false);
+        }
+        else if (direction.x < 0f)
+        {
+            _animator.SetBool("turn_left", true);
+            _animator.SetBool("turn_right", false);
+        }
+        else
+        {
+            _animator.SetBool("turn_right", false);
+            _animator.SetBool("turn_left", false);
+        }
 
         //Gérer la zone verticale et horizontale
         transform.position = new Vector3(Mathf.Clamp(transform.position.x, -8.3f, 8.3f),
@@ -59,8 +119,16 @@ public class Player : MonoBehaviour
     // Méthode appellé quand le joueur subit du dégat
     public void Degats()
     {
-        _viesJoueur--;
-        UIManagerGame.Instance.ChangeLivesDisplayImage(_viesJoueur);
+        if(_shield.activeSelf)
+        {
+            _shield.SetActive(false);
+        }
+        else
+        {
+            _viesJoueur--;
+            UIManagerGame.Instance.ChangeLivesDisplayImage(_viesJoueur);
+
+        }
  
         // Si le joueur n'a plus de vie on arrête le spwan et détruit le joueur
         if (_viesJoueur < 1)

@@ -5,6 +5,7 @@ using UnityEditor;
 using System.Collections;
 using UnityEngine.UI;
 using System;
+using UnityEngine.EventSystems;
 
 public class UIStartEnd : MonoBehaviour
 {
@@ -15,14 +16,27 @@ public class UIStartEnd : MonoBehaviour
     [SerializeField] private Button _buttonMenu = default;
     [SerializeField] private Button _buttonQuitter = default;
 
+    [Header("Variables pour depart de partie")]
+    [SerializeField] private GameObject _buttonDemarrer = default;
+
     private void Start()
     {
+        if(SceneManager.GetActiveScene().buildIndex==0)
+        {
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(_buttonDemarrer);
+        }
+
+
+
         if(SceneManager.GetActiveScene().buildIndex == SceneManager.sceneCountInBuildSettings - 1)
         {
             _buttonMenu.onClick.AddListener(OnMenuClick);
             _buttonQuitter.onClick.AddListener(OnQuitterClick);
             _txtScoreFin.text = "Votre pointage : " + GameManager.Instance.Score.ToString();
             GameOverSequence();
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(_buttonMenu.gameObject);
         }
     }
     public void OnQuitterClick()
